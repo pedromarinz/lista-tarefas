@@ -8,19 +8,21 @@ function addTarefa() {
   let valorInput = input.value
 
   //SE NÃO FOR VAZIO, NEM NULO, NEM INDEFINIDO
-  
-  ++contador;
-  
    if (valorInput !== "" && valorInput !== null && valorInput !== undefined) {
+
+    ++contador;
+
     let novoItem = `<div id="${contador}" class="item">
-        <div class="item-icone">
-          <span class="material-symbols-outlined"> <i class="fa-regular fa-circle"></i>  </span>
+        <div onclick="marcarTarefa(${contador})" class="item-icone">
+          <i id="icone_${contador}" class="fa-regular fa-circle"></i>
         </div>
-        <div class="item-nome">${valorInput}</div>
+        <div onclick="marcarTarefa(${contador})" class="item-nome">${valorInput}</div>
         <div class="item-botao">
-          <button onclick="deletar(${contador})" class="delete"> <i class="fa-solid fa-trash"></i> Deletar </button>
+          <button onclick="deletar(${contador})" class="delete">
+            <i class="fa-solid fa-trash"></i> Deletar
+          </button>
         </div>
-      </div>`
+      </div>`;
 
     //ADICIONAR NOVO ITEM NO MAIN
     main.innerHTML += novoItem;
@@ -28,7 +30,6 @@ function addTarefa() {
     //ZERAR OS CAMPINHOS
     input.value = "";
     input.focus();
-
   }
 }
 
@@ -37,10 +38,26 @@ function deletar(id) {
   tarefa.remove();
 }
 
-input.addEventListener("keyup", function(event) {
-  //SE TECLOU ENTER (13)
-  if(event.keyCode ===13) {
+function marcarTarefa(id) {
+  let item = document.getElementById(id);
+  let icone = document.getElementById("icone_" + id);
+
+  if (!item.classList.contains("clicado")) {
+    item.classList.add("clicado");
+    icone.classList.remove("fa-regular", "fa-circle");
+    icone.classList.add("fa-solid", "fa-circle-check");
+    main.appendChild(item);
+  } else {
+    item.classList.remove("clicado");
+    icone.classList.remove("fa-solid", "fa-circle-check");
+    icone.classList.add("fa-regular", "fa-circle");
+  }
+}
+
+input.addEventListener("keyup", function (event) {
+  if (event.keyCode === 13) {
     event.preventDefault();
     btnAdd.click();
   }
-})
+});
+
